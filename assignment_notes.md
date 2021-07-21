@@ -23,4 +23,17 @@ Schema thoughts
 - What is this entity called? Links? They are shortened URLs/links/addresses. I'll go with Links for now.
 
 
- 
+ Setup notes
+ - Ensure Ruby and Rails is installed
+ - Checkout repo
+ - gem install bundler
+ - bundle install --path vendor/bundle
+ - bin/rails db:migrate
+ - bin/rails db:migrate RAILS_ENV=test
+ - bundle exec rspec ./spec
+
+ # Tradeoffs
+ - In randomly generating a "slug" for the shortened URL, it is possible that the code
+   will randomly generate a slug that's already in the db. The code _could_ handle this
+   by rescuing from the non-unique error, but for the interests of time and simplicity 
+   I've chosen to just allow the error to be raised
