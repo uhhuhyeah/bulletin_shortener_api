@@ -1,3 +1,6 @@
+[![CircleCI](https://circleci.com/gh/uhhuhyeah/bulletin_shortener_api.svg?style=svg)](https://circleci.com/gh/uhhuhyeah/bulletin_shortener_api)
+
+
 # README
 
 ## Commentary
@@ -28,6 +31,10 @@ I used Rails because it's very easy to build and prototype things. It comes with
 * To set up the test and development databases, run `bundle exec rake db:migrate:` and `bundle exec rake db:migrate RAILS_ENV=test`
 
 ### Tests
+Test status on Circle CI:
+[![CircleCI](https://circleci.com/gh/uhhuhyeah/bulletin_shortener_api.svg?style=svg)](https://circleci.com/gh/uhhuhyeah/bulletin_shortener_api)
+
+
 You should now be able to run the automated tests and verify the setup.
 * `bundle exec rspec`
 
