@@ -11,7 +11,7 @@ class LinksController < ApplicationController
 
   def show
     @link = Link.find_by(slug: params[:slug])
-    
+
     if @link
       redirect_to @link.url
     else
@@ -19,6 +19,12 @@ class LinksController < ApplicationController
         message: 'Slug not found'
       }, status: :not_found
     end
+  end
+
+  def index
+    @links = Link.all
+    
+    render json: @links.as_json(only: [:url, :slug], methods: [:time_since_creation])
   end
 
   private

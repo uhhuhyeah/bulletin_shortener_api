@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Links", type: :request do
   let(:headers) { { "ACCEPT" => "application/json" } }
   let(:url) { 'http://example.com/something/very/long/to/share' }
-  
+
   describe "POST /create" do
     context 'with SUCCESS' do
       it 'allows for a link to be created via JSON' do
@@ -69,6 +69,25 @@ RSpec.describe "Links", type: :request do
         expect(response.content_type).to match("application/json")
         expect(response).to have_http_status(:not_found)
       end
+    end
+  end
+
+  describe "GET /index" do
+    let!(:link_1) { Link.create(url: url) }
+    let!(:link_2) { Link.create(url: url + '/2') }
+    let!(:link_3) { Link.create(url: url + '/3') }
+
+    it 'should return a list of all links' do
+      get "/links", :headers => headers
+
+      expect(response.content_type).to match("application/json")
+      json_response = JSON.parse(response.body)
+
+      expect(json_response.size).to eq 3
+      expect(json_response.first).to_not have_key('id')
+      expect(json_response.first).to have_key('url')
+      expect(json_response.first).to have_key('slug')
+      expect(json_response.first).to have_key('time_since_creation')
     end
   end
 end
