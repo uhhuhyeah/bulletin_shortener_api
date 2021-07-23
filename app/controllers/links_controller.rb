@@ -9,6 +9,18 @@ class LinksController < ApplicationController
     }, status: :created
   end
 
+  def show
+    @link = Link.find_by(slug: params[:slug])
+    
+    if @link
+      redirect_to @link.url
+    else
+      render json: {
+        message: 'Slug not found'
+      }, status: :not_found
+    end
+  end
+
   private
 
   def render_unprocessable_entity_response(exception)

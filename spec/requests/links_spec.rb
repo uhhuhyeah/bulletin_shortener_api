@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Links", type: :request do
-
+  let(:headers) { { "ACCEPT" => "application/json" } }
+  let(:url) { 'http://example.com/something/very/long/to/share' }
+  
   describe "POST /create" do
-    let(:headers) { { "ACCEPT" => "application/json" } }
-    let(:url) { 'http://example.com/something/very/long/to/share' }
-
     context 'with SUCCESS' do
       it 'allows for a link to be created via JSON' do
         post "/links", :params => { :url => url }, :headers => headers
@@ -48,6 +47,27 @@ RSpec.describe "Links", type: :request do
 
         expect(response.content_type).to match("application/json")
         expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+  end
+
+  describe "GET /show" do
+    let!(:link) { Link.create(url: url) }
+
+    context 'with SUCCESS' do
+      it 'should redirect to the URL' do
+        get "/s/#{link.slug}", :headers => headers
+        expect(response).to have_http_status(:redirect)
+        expect(response).to redirect_to link.url
+      end
+    end
+
+    context 'with FAILURE' do 
+      it 'should return 404 if link is not found' do
+        get "/s/not_a_real_slug", :headers => headers
+
+        expect(response.content_type).to match("application/json")
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
