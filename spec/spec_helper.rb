@@ -18,7 +18,7 @@ require File.expand_path('../../config/environment', __FILE__)
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
 
-  config.before(:suite) do
+  config.before(:each) do
     DatabaseCleaner.clean_with(:truncation)
   end
 
