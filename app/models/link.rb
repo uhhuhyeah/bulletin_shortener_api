@@ -5,6 +5,10 @@ class Link < ActiveRecord::Base
   validates :slug, presence: true, length: { maximum: SLUG_LENGTH }, uniqueness: true
 
   before_validation :generate_slug
+
+  def self.shorten(url)
+    self.where(url: url).first_or_create!
+  end
   
   private
 

@@ -1,9 +1,32 @@
 require 'spec_helper'
 
 RSpec.describe Link do
+  let(:long_url) { 'http://example.com/something/very/long/to/share' }
+
+  describe '.shorten' do
+    it 'should create a new slug/new record for a new URL' do
+      expect {
+        Link.shorten(long_url)
+      }.to change(Link, :count).by(1)
+    end
+    
+    it 'should raise an error if a URL is not provided' do
+      expect {
+        Link.shorten(nil)
+      }.to raise_error(ActiveRecord::RecordInvalid, "Validation failed: Url can't be blank")
+    end
+
+    it 'should return an existing slug/new record for an existing URL' do
+      existing_link = Link.shorten(long_url)
+
+      expect {
+        link = Link.shorten(long_url)
+        expect(link.slug).to eq(existing_link.slug)
+      }.to_not change(Link, :count)
+    end
+  end
 
   describe '#create' do
-    let(:long_url) { 'http://example.com/something/very/long/to/share' }
 
     it 'should generate a unique slug given a URL to save' do
       expect {
